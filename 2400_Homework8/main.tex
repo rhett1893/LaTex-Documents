@@ -1,0 +1,106 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage{fullpage}
+\usepackage[top=2cm, bottom=4.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{amsmath,amsthm,amsfonts,amssymb,amscd}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{fancyhdr}
+\usepackage{mathrsfs}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{soul}
+\usepackage{pgfplots}
+
+\hypersetup{%
+  colorlinks=true,
+  linkcolor=blue,
+  linkbordercolor={0 0 1}
+}
+ 
+\renewcommand\lstlistingname{Algorithm}
+\renewcommand\lstlistlistingname{Algorithms}
+\def\lstlistingautorefname{Alg.}
+
+\newcommand{\sur}[1]{\ensuremath{^{\textrm{#1}}}}
+\newcommand{\sous}[1]{\ensuremath{_{\textrm{#1}}}}
+
+\lstdefinestyle{Python}{
+    language        = Python,
+    frame           = lines, 
+    basicstyle      = \footnotesize,
+    keywordstyle    = \color{blue},
+    stringstyle     = \color{green},
+    commentstyle    = \color{red}\ttfamily
+}
+
+\setlength{\parindent}{0.0in}
+\setlength{\parskip}{0.05in}
+
+% Edit these as appropriate
+\newcommand\course{CSCI 2400}      %<--class
+\newcommand\hwnumber{8}                  % <-- homework number
+\newcommand\NetIDa{Rhett Hanscom}           % <-- NetID of person #1
+\newcommand\NetIDb{rhha1623@colorado.edu}           % <-- NetID of person #2 (Comment this line out for problem sets)
+
+\pagestyle{fancyplain}
+\headheight 35pt
+\lhead{\NetIDa}
+\lhead{\NetIDa\\\NetIDb}                 % <-- Comment this line out for problem sets (make sure you are person #1)
+\chead{\textbf{\Large Homework \hwnumber}}
+\rhead{\course \\ \today}
+\lfoot{}
+\cfoot{}
+\rfoot{\small\thepage}
+\headsep 1.5em
+
+\begin{document}
+
+\section*{Problem 2.77}
+
+\begin{enumerate}
+\begin{enumerate}
+    \item K = (x $<<$ 4) + x
+    \item K = (x - (x $<<$ 3))
+    \item K = $(x << 6) - (x << 2)$
+    \item K = $(x << 4) - (x << 7)$
+\end{enumerate}
+\end{enumerate}
+ 
+\section*{Problem 3.66}
+
+Lines 2 and 3 int the assembly code for $sum_col$ clearly indicate the following operations performed on the the values stored within the registers we are interested in:
+\begin{verbatim}
+#define NR(v) (3*v)
+#define NC(v) ((4*v)+1)    
+\end{verbatim}
+
+\section*{Problem 6.26}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=1\linewidth]{626.jpeg}
+    \caption{Table from question 6.26 in the text, filled in with answers.}
+\end{figure}
+
+\section*{Problem 7.10}
+
+\begin{enumerate}
+\begin{enumerate}
+    \item 
+    \begin{verbatim}
+        gcc p.o libx.a
+    \end{verbatim}
+    \item 
+    \begin{verbatim}
+        gcc p.o libx.a liby.a libx.a
+    \end{verbatim}
+    \item
+    \begin{verbatim}
+        gcc p.o libx.a liby.a libx.a libz.a
+    \end{verbatim}
+\end{enumerate}
+\end{enumerate}
+
+\end{document}
