@@ -1,0 +1,182 @@
+\documentclass[12pt]{article}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\textwidth}{6.5in}
+\setlength{\parindent}{0in}
+\setlength{\parskip}{\baselineskip}
+
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{float}
+\pagestyle{fancy}
+
+
+\begin{document}
+
+\lhead{{\bf CSCI 3104: Algorithms \\ Problem Set 7 (110 total points)} }
+\rhead{{\bf Rhett\ Hanscom\\ Summer 2019, CU-Boulder}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\vspace{-3mm}
+\begin{enumerate}
+	% HARD PROBLEM
+	\item (30 points) Grog gives you the following unweighted graph and asks you to construct a weight function $w$ on the edges, using positive integer weights only, such that the following conditions are true regarding minimum spanning trees (MST) and single-source shortest path trees (SSSP):
+	\begin{itemize}
+	\itemsep-0.1pt
+	\item The MST is distinct from any of the seven SSSP trees.
+	\item The order in which Jarn\'ik/Prim's algorithm adds the safe edges is different from the order in which Kruskal's algorithm adds them.
+	\end{itemize}
+	Justify your solution by (i) giving the edges weights, (ii) showing the corresponding MST and all the SSSP trees, and (iii) giving the order in which edges are added by each of the two algorithms.
+
+    % ----- FIGURE 1 : unweighted_graph.png -----
+    \begin{figure}[h!]
+    \begin{center}
+    \includegraphics[scale=0.7]{unweighted_graph.png} 
+    \end{center}
+    \end{figure}
+    % ----------
+
+    \pagebreak
+\textbf{Solution to Problem 1:}
+Part A is ABOVE, Part B is on the FOLLOWING PAGE.
+\newline \smallskip
+\begin{enumerate}
+    \item
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.3]{weights.jpg} 
+\caption{Graph with weights assigned.}
+\end{center}
+\end{figure}
+    \item
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.2]{MST.jpg}
+\includegraphics[scale=0.2]{SSSP.jpg} 
+\caption{MST and the 7 possible SSSP Graphs.}
+\end{center}
+\end{figure}
+    \item 
+Prim's Algorithm Edge Order: \newline
+$(A,B) -> (A,D) -> (D,F) -> (E,B) -> (A,C) -> (E,G)$ \newline
+Kruskal's Algorithm Edge Order: \newline
+$(A,D) -> (A,B) -> (D,F) -> (E,B) -> (A,C) -> (E,G)$ \newline
+\end{enumerate}
+\pagebreak
+	
+	% CURRENCY ARBITRAGE
+	\item (25 points) Harry and Shadow think they have come up with a way to get rich by exploiting the ore market. Their idea is to exploit exchange rates in order to transform one unit of gold into more than one unit of gold, through a sequence of exchanges. For instance, suppose 1 unit of gold buys 0.82 silver units, 1 silver unit buys 129.7 ethereum units, 1 ethereum unit buys 12 doge units, and finally 1 doge unit buys 0.0008 gold units. By converting their loot, Harry and Shadow think they could start with 1 gold unit and buy $0.82 \times 129.7 \times 12 \times 0.0008 \approx 1.02$ gold units, thereby making a 2\% profit! The problem is that those dwarves at Rocky  Mountain  Bank  charge a transaction cost for each exchange.
+	
+	Suppose that Harry and Shadow start with knowledge of $n$ ores $c_{1},c_{2},\dots,c_{n}$ and an $n\times n$ table $R$ of exchange rates, such that one unit of ore $c_{i}$ buys $R[i,j]$ units of ore $c_{j}$. A traditional \textit{arbitrage opportunity} is thus a cycle in the induced graph such that the product of the edge weights is greater than unity. That is, a sequence of ores $\langle c_{i_{1}} , c_{i_{2}}, \dots, c_{i_{k}}\rangle$ such that $R[i_{1}, i_{2}] \times R[i_{2}, i_{3}] \times \cdots \times R[i_{k-1}, i_{k}] \times R[i_{k}, i_{1}] > 1$. Each transaction, however, must pay Rocky  Mountain  Bank a fraction $\alpha$ of the total transaction value, e.g., $\alpha=0.01$ for a 1\% rate.
+
+	\begin{enumerate}
+	\item When given $R$ and $\alpha$, give an efficient algorithm that can determine if an arbitrage opportunity exists. Analyze the running time of your algorithm.
+	
+	Thormund's hint:\ It is possible to solve this problem in $O(n^{3})$. 
+	\item For an arbitrary $R$, explain how varying $\alpha$ changes the set of arbitrage opportunities that exist and that your algorithm might identify.
+	\end{enumerate}
+    
+    \pagebreak
+\textbf{Solution to Problem 2:}
+
+\begin{enumerate}
+    \item
+    I would suggest to Harry and Shadow the Bellman-Ford algorithm. This would mean a graph should be created to match the G = (V, E) conditions of the Bellman-Ford algorithm, with a weighted and directed graph. A vertex, V, would be created for each ore and directed edges would be placed between every pair of nodes. For example, for an arbitrary set of vertices (ores) $c_{1}$ and $c_{2}$ there would exist the edges ($c_{1}$, $c_{2}$) and ($c_{2}$, $c_{1}$). \newline \smallskip
+    
+    We have established that we are looking for $R[i_{1}, i_{2}] \times R[i_{2}, i_{3}] \times \cdots \times R[i_{k-1}, i_{k}] \times R[i_{k}, i_{1}] > 1 + \alpha$, this means that $1/R[i_{1}, i_{2}] \times 1/R[i_{2}, i_{3}] \times \cdots \times 1/R[i_{k-1}, i_{k}] \times 1/R[i_{k}, i_{1}] < 1 + \alpha$ and also that $(1/R[i_{1}, i_{2}])/1 + \alpha \times (1/R[i_{2}, i_{3}])/1 + \alpha \times \cdots \times (1/R[i_{k-1}, i_{k}])/1 + \alpha \times (1/R[i_{k}, i_{1}])/1 + \alpha < 1$ \newline \smallskip
+    
+    
+    We can take the log of this side to see that we now have $lg((1/R[i_{1}, i_{2}])/1 + \alpha) \times lg((1/R[i_{2}, i_{3}])/1 + \alpha) \times \cdots \times lg((1/R[i_{k-1}, i_{k}])1 + \alpha) \times lg((1/R[i_{k}, i_{1}])1 + \alpha) < 0$ \newline
+    From this, we can see that an appropriate weight for an edge would be $lg((1/R[i_{1}, i_{2}])/1 + \alpha)$ or $-lg(R[i_{1}, i_{2}])/1 + \alpha)$ \newline \smallskip
+    
+    We would need to add another vertex $c_{1}$ also connected with edges to each other vertex with a zero weight, this allows every vertex to be reached from this starting, zero weight vertex. It will not introduce any new paths but will be able to identify any negative weight cycles. As we are only looking to see if a path to profit exists and the Bellman-Ford algorithm returns a Boolean, we can flip this to address our negative weights and return it. \newline \smallskip
+    
+    The run time for the Bellman-Ford algorithm is $O(n^{3})$. The time to create a graph from the table would be $O(n^{2})$. $O(n^{3})$ + $O(n^{2})$ become $O(n^{3})$, asymptotically, therefore this algorithm can be approximated by $O(n^{3})$.
+    \newline \smallskip
+    \item
+    As described by my above algorithm, the $\alpha)$ is an integral component of assigning a weight to an edge. As the $\alpha)$ increasing, so to must the final profit of exchanging ores become more and more plentiful. This is especially true considering the fact that the more exchanges you make, the higher penalty is incurred by the $\alpha)$, meaning you must obtain a large profit in a fewer number of trades. As $\alpha)$ grows one can have even fewer trades. This trend continues until there are no possible ores which could be traded to obtain a profit.
+\end{enumerate}
+ \pagebreak
+
+	% PROGRAMMING PROBLEM
+	\item (55 points) Bidirectional breadth-first search is a variant of standard BFS for finding a shortest path between two vertices $s,t \in V(G)$. The idea is to run \emph{two} breadth-first searches simultaneously, one starting from $s$ and one starting from $t$, and stop when they ``meet in the middle'' (that is, whenever a vertex is encountered by both searches). ``Simultaneously'' here doesn't assume you have multiple processors at your disposal; it's enough to alternate iterations of the searches: one iteration of the loop for the BFS that started at $s$ and one iteration of the loop for the BFS that started at $t$.
+	
+	As we'll see, although the worst-case running time of BFS and Bidirectional BFS are asymptotically the same, in practice Bidirectional BFS often performs significantly better.
+	
+	Throughout this problem, all graphs are unweighted, undirected, simple graphs.
+	
+	\begin{enumerate}
+	
+	\item Implement from scratch a function \texttt{BFS(G,s,t)} that performs an ordinary BFS in the (unweighted, directed) graph $G$ to find a shortest path from $s$ to $t$. Assume the graph is given as an adjacency list; for the list of neighbors of each vertex, you may use any data structure you like (including those provided in standard language libraries). Have your function return a pair $(d,k)$, where $d$ is the distance from $s$ to $t$ (-1 if there is no $s$ to $t$ path), and $k$ is the number of nodes popped off the queue during the entire run of the algorithm.
+	
+	\item Implement from scratch a function  \texttt{BidirectionalBFS(G,s,t)} that takes in an unweighted, directed graph $G$, and two of its vertices $s,t$, and performs a bidirectional BFS. As with the previous function, this function should return a pair $(d,k)$ where $d$ is the distance from $s$ to $t$ (-1 if there is no path from $s$ to $t$) and $k$ is the number of vertices popped off of both queues during the entire run of the algorithm.
+	
+	\item For each of the following families of graphs $G_n$, write code to execute $\texttt{BFS}$ and $\texttt{BidirectionalBFS}$ on these graphs, and produce the following output: 
+	\begin{itemize}
+	\item In text, the pairs $(n,d_1,k_1,d_2,k_2)$ where $n$ is the index of the graph, $(d_1,k_1)$ is the output of $\texttt{BFS}$ and $(d_2, k_2)$ is the output of $\texttt{BidirectionalBFS}$. 
+	\item a plot with $n$ on the $x$-axis, $k$ on the $y$-axis, and with two line charts, one for the values of $k_1$ and one for the values of $k_2$:
+	\end{itemize}
+	
+	\begin{enumerate}
+	\item Grids. $G_n$ is an $n \times n$ grid, where each vertex is connected to its neighbors in the four cardinal directions (N,S,E,W). Vertices on the boundary of the grid will only have 3 neighbors, and corners will only have 2 neighbors. Let $s_n$ be the midpoint of one edge of the grid, and $t_n$ the midpoint of the opposite edge. For example, for $n=3$ we have:
+    \begin{figure}[H]
+    \begin{center}
+    \includegraphics[scale=0.9]{grid.png} 
+    \end{center}
+    \end{figure}
+
+	(When $n$ is even $s_n$ and $t_n$ can be either ``midpoint,'' since there are two.)
+	
+	Produce output for $n=3,4,5,\dotsc,20$.
+	
+	\item Trees. $G_n$ is a complete binary tree of depth $n$. $s_n$ is the root and $t_n$ is any leaf. Produce output for $n=3,4,5,\dotsc,15$. For example, for $n=3$ we have:
+    \begin{figure}[H]
+    \begin{center}
+    \includegraphics[scale=0.6]{tree.png} 
+    \end{center}
+    \end{figure}
+		
+	\item Random graphs. $G_n$ is a graph on $n$ vertices constructed as follows. For each pair of of vertices $(i,j)$, get a random boolean value; if it is \texttt{true}, include the edge $(i,j)$, otherwise do not. Let $s_n$ be vertex 1 and $t_n$ be vertex 2 (food for thought: why does it not matter, on average, which vertices we take $s,t$ to be?) For each $n$, produce 50 such random graphs and report just the average values of $(d_1,k_1,d_2,k_2)$ over those 50 trials. Produce this output for $n=3,4,5,\dotsc,20$.
+	\end{enumerate}
+	\end{enumerate}
+\pagebreak
+\textbf{Solution to Problem 3:}
+
+I have included my $PS7.cpp$ file, in which the two required functions (and then some!) are written and compile without error. For the graphs, I used the data created by the c++ functions and created graphs with python. This is the $PS7_plots.py$ file I have also included. 
+\newline \smallskip
+
+The outputs for the required graphs are included above. The plots are included on the next pages.
+\newline \smallskip
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.6]{results1.png} 
+\includegraphics[scale=0.6]{results2.png} 
+\includegraphics[scale=0.6]{results3.png} 
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.4]{plot1.png} 
+\includegraphics[scale=0.4]{plot2.png} 
+\includegraphics[scale=0.4]{plot3.png} 
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.4]{plot4.png} 
+\includegraphics[scale=0.4]{plot5.png} 
+\includegraphics[scale=0.4]{plot6.png} 
+\end{center}
+\end{figure}
+
+
+
+
+
+\end{enumerate}
+\end{document}
+
+
